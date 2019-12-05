@@ -1,0 +1,90 @@
+#!/bin/sh
+
+## Functions
+function download_setup {
+        arch=$(arch)
+
+	curl_exists=$(command -v curl)
+	
+	if [ $curl_exists ]; then
+		download_setup_curl
+	else
+		echo curl not found. Falling back to wget.
+		wget_exists=$(command -v wget)
+		
+		if [ $wget_exists ]; then
+			download_setup_wget
+		else
+			echo Neither 'curl' nor 'wget' could be found.
+			echo Please try again after installing either one.
+			exit 2
+		fi
+	fi
+
+        if [ $? -eq 0 ] && [ ! -f /setup.exe ]; then
+                echo Failed to download setup
+                exit 1;
+	else
+		chmod +x /setup.exe
+        fi
+}
+
+function download_setup_wget {
+	wget https://cygwin.com/setup-$arch.exe -O /setup.exe
+}
+
+function download_setup_curl {
+	curl https://cygwin.com/setup-$arch.exe > /setup.exe
+}
+
+function check_is_admin
+{
+    net session > /dev/null 2>&1
+    if [ ! $? -eq 0 ]; then
+	echo WARNING: You are not running this script as an administrator.
+	echo "         You may be prompted by a UAC dialog in Windows."
+	echo "         And this script will not wait for the setup to finish in this case."
+    fi
+}
+
+function help {
+	echo Usage:
+	echo "	-h --help	Displays this help message."
+	echo "	-i --install	Installs the packages specified followinf this command. Separate the package names with a space."
+	echo ""
+	echo That is all there is for now.
+	echo You can help enhance this script by contributing to 'https://github.com/DaniAsh551/cygwin'.
+}
+
+## Check if is admin
+check_is_admin
+
+## Check if setup exists
+if [ ! -f /setup.exe ]; then
+	echo No Setup
+	echo Attempting to download setup.
+	download_setup
+fi
+
+## Check if any arguments are given or whether help if being asked for.
+if (( $# < 1 )) || [ $1 = -h ] || [ $1 = --help ]; then
+	help
+	exit 0
+fi
+
+if [ $1 = -i ] || [ $1 = --install ]; then
+	if [ ! $2 ]; then
+		echo Please specify the packages to install.
+		help
+		exit 0
+	fi
+
+packages="${@:2}"
+packages="${packages//,/ }"
+
+/setup.exe -q -P $packages
+exit 0
+fi
+
+## Fall back to help if no conditions matched
+help
