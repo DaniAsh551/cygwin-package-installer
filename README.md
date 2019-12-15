@@ -3,7 +3,7 @@
 ### This project is licensed under the GNU GPLv3.
 ##### You can read more about the GNU GPLv3 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">here</a>.
 
-<b>Feel Free to contribute, fork and submit pull requests.</>
+<b>Feel Free to contribute, fork and submit pull requests.
 
 This script aims to provide a simple and easy way to install packages in Cygwin within the Cygwin terminal itself.
 If you want to learn more about Cygwin, please visit the Cygwin homepage <a href="https://cygwin.com/">here</a>.
