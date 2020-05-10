@@ -50,7 +50,7 @@ function check_is_admin
 function help {
 	echo Usage:
 	echo "	-h --help	Displays this help message."
-	echo "	-i --install	Installs the packages specified followinf this command. Separate the package names with a space."
+	echo "	-i --install	Installs the packages specified following this command. Separate the package names with a space."
 	echo ""
 	echo That is all there is for now.
 	echo You can help enhance this script by contributing to 'https://github.com/DaniAsh551/cygwin'.
